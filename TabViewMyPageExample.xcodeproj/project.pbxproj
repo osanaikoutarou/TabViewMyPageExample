@@ -18,6 +18,7 @@
 		1E2E81DB2A42111900543424 /* BetaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2E81DA2A42111900543424 /* BetaView.swift */; };
 		1E2E81DD2A42112200543424 /* OmegaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2E81DC2A42112200543424 /* OmegaView.swift */; };
 		1E2E81DF2A4211D700543424 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2E81DE2A4211D700543424 /* Cell.swift */; };
+		1E450AEB2A454DF6005BE210 /* UnitPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E450AEA2A454DF6005BE210 /* UnitPoint+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		1E2E81DA2A42111900543424 /* BetaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaView.swift; sourceTree = "<group>"; };
 		1E2E81DC2A42112200543424 /* OmegaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmegaView.swift; sourceTree = "<group>"; };
 		1E2E81DE2A4211D700543424 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		1E450AEA2A454DF6005BE210 /* UnitPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitPoint+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				1E2E81AF2A4210EC00543424 /* ContentView.swift */,
 				1E2E81B12A4210EE00543424 /* Assets.xcassets */,
 				1E2E81B32A4210EE00543424 /* Preview Content */,
+				1E450AEA2A454DF6005BE210 /* UnitPoint+Extension.swift */,
 			);
 			path = TabViewMyPageExample;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				1E2E81B02A4210EC00543424 /* ContentView.swift in Sources */,
 				1E2E81DD2A42112200543424 /* OmegaView.swift in Sources */,
 				1E2E81AE2A4210EC00543424 /* TabViewMyPageExampleApp.swift in Sources */,
+				1E450AEB2A454DF6005BE210 /* UnitPoint+Extension.swift in Sources */,
 				1E2E81D92A42111200543424 /* AlphaView.swift in Sources */,
 				1E2E81DF2A4211D700543424 /* Cell.swift in Sources */,
 			);

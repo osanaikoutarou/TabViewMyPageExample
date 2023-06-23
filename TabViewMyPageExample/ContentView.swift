@@ -42,11 +42,14 @@ struct ContentView: View {
 
         ZStack {
             TabView(selection: $selection) {
-                AlphaView(scrollOffsetForAlpha: $scrollOffsetForAlpha,
+                AlphaView(tabViewIndex: 0,
+                          headerHeight: 200,
+                          tabHeight: 30,
+                          selection: $selection,
+                          scrollOffsetForAlpha: $scrollOffsetForAlpha,
                           scrollOffsetForBeta: $scrollOffsetForBeta,
                           scrollOffsetForOmega: $scrollOffsetForOmega,
                           paddingTop: $paddingTop,
-                          selection: $selection,
                           customOnAppear: $onAppear0)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.red)
@@ -56,11 +59,14 @@ struct ContentView: View {
                                                value: UIScreen.main.bounds.width * 0 - $0.frame(in: .global).minX)
                     })
                     .tag(0)
-                BetaView(scrollOffsetForAlpha: $scrollOffsetForAlpha,
+                BetaView(tabViewIndex: 1,
+                         headerHeight: 200,
+                         tabHeight: 30,
+                         selection: $selection,
+                         scrollOffsetForAlpha: $scrollOffsetForAlpha,
                          scrollOffsetForBeta: $scrollOffsetForBeta,
                          scrollOffsetForOmega: $scrollOffsetForOmega,
                          paddingTop: $paddingTop,
-                         selection: $selection,
                          customOnAppear: $onAppear1)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.green)
@@ -70,11 +76,14 @@ struct ContentView: View {
                                                value: UIScreen.main.bounds.width * 1.0 - $0.frame(in: .global).minX)
                     })
                     .tag(1)
-                OmegaView(scrollOffsetForAlpha: $scrollOffsetForAlpha,
+                OmegaView(tabViewIndex: 2,
+                          headerHeight: 200,
+                          tabHeight: 30,
+                          selection: $selection,
+                          scrollOffsetForAlpha: $scrollOffsetForAlpha,
                           scrollOffsetForBeta: $scrollOffsetForBeta,
                           scrollOffsetForOmega: $scrollOffsetForOmega,
                           paddingTop: $paddingTop,
-                          selection: $selection,
                           customOnAppear: $onAppear2)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.blue)
@@ -157,26 +166,41 @@ struct ContentView: View {
 
 
 
-            // これがヘッダー部分
             VStack {
-                VStack {
+                // ヘッダー＋タブ
+                VStack(spacing: 0) {
                     HStack {
-
+                        // ヘッダー
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 300)
+                    .frame(height: 200)
                     .background(.white.opacity(0.5))
                     .allowsHitTesting(false)
 
+                    // タブ
                     HStack(spacing: 0) {
                         ForEach(0..<3) { index in
                             Button(action: {
                                 self.selection = index
+
+                                onAppear0 = false
+                                onAppear1 = false
+                                onAppear2 = false
+                                if index == 0 {
+                                    onAppear0 = true
+                                }
+                                if index == 1 {
+                                    onAppear1 = true
+                                }
+                                if index == 2 {
+                                    onAppear2 = true
+                                }
                             }) {
                                 VStack {
                                     Text("Page")
                                 }
-                                .frame(width: UIScreen.main.bounds.width/3.0 , height: 30)
+                                .frame(width: UIScreen.main.bounds.width/3.0 ,
+                                       height: 30)  // タブの高さ
                                 .background(self.selection == index ? Color.orange : Color.gray)
                                 .cornerRadius(10)
                             }
