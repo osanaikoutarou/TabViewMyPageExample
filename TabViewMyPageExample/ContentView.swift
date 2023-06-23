@@ -14,10 +14,7 @@ struct ContentView: View {
     @State private var scrollOffsetForBeta: CGFloat = 0
     @State private var scrollOffsetForOmega: CGFloat = 0
 
-    @State private var paddingTop: CGFloat = 200
-//    @State private var paddingTopForAlpha: CGFloat = 200
-//    @State private var paddingTopForBeta: CGFloat = 200
-//    @State private var paddingTopForOmega: CGFloat = 200
+    @State private var headerTop: CGFloat = 200
 
     enum TabViewScreensShowState {
         case unknown
@@ -34,75 +31,72 @@ struct ContentView: View {
     @State var onAppear1: Bool = false
     @State var onAppear2: Bool = false
 
-    var scrollOffset: CGFloat {
-        scrollOffsetForAlpha
-    }
+    @State var tabViewOffsetX: CGFloat = 0
+
+    var headerHeight: CGFloat { 300 }
+    var tabHeight: CGFloat { 30 }
 
     var body: some View {
 
         ZStack {
             TabView(selection: $selection) {
                 AlphaView(tabViewIndex: 0,
-                          headerHeight: 200,
-                          tabHeight: 30,
+                          headerHeight: headerHeight,
+                          tabHeight: tabHeight,
                           selection: $selection,
                           scrollOffsetForAlpha: $scrollOffsetForAlpha,
                           scrollOffsetForBeta: $scrollOffsetForBeta,
                           scrollOffsetForOmega: $scrollOffsetForOmega,
-                          paddingTop: $paddingTop,
+                          headerTop: $headerTop,
                           customOnAppear: $onAppear0)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.red)
                     .background(GeometryReader {
-                        // read and store origin (min X) of page
                         Color.clear.preference(key: ViewOffsetKey0.self,
                                                value: UIScreen.main.bounds.width * 0 - $0.frame(in: .global).minX)
                     })
                     .tag(0)
                 BetaView(tabViewIndex: 1,
-                         headerHeight: 200,
-                         tabHeight: 30,
+                         headerHeight: headerHeight,
+                         tabHeight: tabHeight,
                          selection: $selection,
                          scrollOffsetForAlpha: $scrollOffsetForAlpha,
                          scrollOffsetForBeta: $scrollOffsetForBeta,
                          scrollOffsetForOmega: $scrollOffsetForOmega,
-                         paddingTop: $paddingTop,
+                         headerTop: $headerTop,
                          customOnAppear: $onAppear1)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.green)
                     .background(GeometryReader {
-                        // read and store origin (min X) of page
                         Color.clear.preference(key: ViewOffsetKey1.self,
                                                value: UIScreen.main.bounds.width * 1.0 - $0.frame(in: .global).minX)
                     })
                     .tag(1)
                 OmegaView(tabViewIndex: 2,
-                          headerHeight: 200,
-                          tabHeight: 30,
+                          headerHeight: headerHeight,
+                          tabHeight: tabHeight,
                           selection: $selection,
                           scrollOffsetForAlpha: $scrollOffsetForAlpha,
                           scrollOffsetForBeta: $scrollOffsetForBeta,
                           scrollOffsetForOmega: $scrollOffsetForOmega,
-                          paddingTop: $paddingTop,
+                          headerTop: $headerTop,
                           customOnAppear: $onAppear2)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.blue)
                     .background(GeometryReader {
-                        // read and store origin (min X) of page
                         Color.clear.preference(key: ViewOffsetKey2.self,
                                                value: UIScreen.main.bounds.width * 2.0 - $0.frame(in: .global).minX)
                     })
                     .tag(2)
-                    .onAppear {
-                        print("🐙", "Omega3")
-                    }
-
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .onPreferenceChange(ViewOffsetKey0.self) {
                 // 意図しないタイミングで$0==0が投げられるため、その対応
                 if $0 == 0 {
                     setCurrentShowingStateBySelection()
+                    if selection == 0 {
+                        tabViewOffsetX = 0
+                    }
                 }
                 else {
                     if $0 > UIScreen.main.bounds.width * 0 && $0 < UIScreen.main.bounds.width * 1.0 {
@@ -111,12 +105,17 @@ struct ContentView: View {
                     if $0 <= 0 {
                         currentShowingState = .p0
                     }
+                    tabViewOffsetX = $0
                 }
             }
             .onPreferenceChange(ViewOffsetKey1.self) {
+                print($0)
                 // 意図しないタイミングで$0==0が投げられるため、その対応
                 if $0 == 0 {
                     setCurrentShowingStateBySelection()
+                    if selection == 0 {
+                        tabViewOffsetX = 0
+                    }
                 }
                 else {
                     if $0 > UIScreen.main.bounds.width * 1.0 && $0 < UIScreen.main.bounds.width * 2.0 {
@@ -125,21 +124,26 @@ struct ContentView: View {
                     if $0 == UIScreen.main.bounds.width * 1.0 {
                         currentShowingState = .p1
                     }
+                    tabViewOffsetX = $0
                 }
             }
             .onPreferenceChange(ViewOffsetKey2.self) {
+                print($0)
                 // 意図しないタイミングで$0==0が投げられるため、その対応
                 if $0 == 0 {
                     setCurrentShowingStateBySelection()
+                    if selection == 0 {
+                        tabViewOffsetX = 0
+                    }
                 }
                 else {
                     if $0 >= UIScreen.main.bounds.width * 2.0 {
                         currentShowingState = .p2
                     }
+                    tabViewOffsetX = $0
                 }
             }
             .onChange(of: currentShowingState) { newValue in
-                print("⭐", newValue)
                 onAppear0 = false
                 onAppear1 = false
                 onAppear2 = false
@@ -163,17 +167,14 @@ struct ContentView: View {
                 prevShowingState = newValue
             }
 
-
-
-
             VStack {
                 // ヘッダー＋タブ
-                VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        // ヘッダー
+                        // ヘッダーはここ
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 200)
+                    .frame(height: headerHeight)
                     .background(.white.opacity(0.5))
                     .allowsHitTesting(false)
 
@@ -200,16 +201,22 @@ struct ContentView: View {
                                     Text("Page")
                                 }
                                 .frame(width: UIScreen.main.bounds.width/3.0 ,
-                                       height: 30)  // タブの高さ
+                                       height: tabHeight)  // タブの高さ
                                 .background(self.selection == index ? Color.orange : Color.gray)
-                                .cornerRadius(10)
                             }
                         }
                     }
+                    .edgesIgnoringSafeArea(.all)
+
+                    // バー
+                    VStack {
+                    }
+                    .frame(width: UIScreen.main.bounds.width/3.0, height: 5)
+                    .background(.black)
+                    .offset(x: tabViewOffsetX/3.0)
+
                 }
-                .offset(y: -paddingTop)     // ⭐
-
-
+                .offset(y: -headerTop)     // ⭐
 
                 Spacer()
             }
@@ -239,27 +246,17 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-struct Model: Identifiable {
-    var id: String = UUID().uuidString
-    var title: String
-}
 
 
-
-
+// PreferenceKeys
 struct ScrollOffsetPreferenceKey: PreferenceKey {
     typealias Value = CGFloat
     static var defaultValue: CGFloat = 0
-
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         let next = nextValue()
-//        print("✅", value, next)
         value += next
-
     }
 }
-
-
 struct ViewOffsetKey0: PreferenceKey {
     typealias Value = CGFloat
     static var defaultValue: CGFloat = 0
@@ -280,4 +277,12 @@ struct ViewOffsetKey2: PreferenceKey {
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value += nextValue()
     }
+}
+
+var thin: CGFloat { 0.1 }
+
+//実際には不要
+struct Model: Identifiable {
+    var id: String = UUID().uuidString
+    var title: String
 }

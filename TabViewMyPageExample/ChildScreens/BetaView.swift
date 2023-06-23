@@ -39,7 +39,7 @@ struct BetaView: View {
     @Binding var scrollOffsetForAlpha: CGFloat
     @Binding var scrollOffsetForBeta: CGFloat
     @Binding var scrollOffsetForOmega: CGFloat
-    @Binding var paddingTop: CGFloat
+    @Binding var headerTop: CGFloat
     @Binding var customOnAppear: Bool   // こちらで作成したonAppearタイミング
 
     private var isShowingThisScreen: Bool {
@@ -78,21 +78,22 @@ private extension BetaView {
                     }
                 }
                 .coordinateSpace(name: "scrollView")
+                .scrollIndicators(.never)
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { scroll in
                     // 現在表示中の画面ならば
                     if isShowingThisScreen {
-                        paddingTop = min(scroll, headerHeight - 0.1)
+                        headerTop = min(scroll, headerHeight - thin)
                         scrollOffsetForAlpha = scroll
 
-                        if scroll < headerHeight - 0.1 {
+                        if scroll < headerHeight - thin {
                             // 他の画面のスクロール量をリセット
                             scrollOffsetForAlpha = scroll
                             scrollOffsetForOmega = scroll
                         }
                         else {
                             // スクロール量を維持か、上に隙間が空く場合はHeaderに吸い付かせる
-                            scrollOffsetForAlpha = max(scrollOffsetForAlpha, min(scroll, headerHeight - 0.1))
-                            scrollOffsetForOmega = max(scrollOffsetForOmega, min(scroll, headerHeight - 0.1))
+                            scrollOffsetForAlpha = max(scrollOffsetForAlpha, min(scroll, headerHeight - thin))
+                            scrollOffsetForOmega = max(scrollOffsetForOmega, min(scroll, headerHeight - thin))
                         }
                     }
                 }
@@ -111,7 +112,7 @@ private extension BetaView {
     var scrollAnchor: some View {
         VStack {
         }
-        .frame(width: UIScreen.main.bounds.width, height: 0.1)
+        .frame(width: UIScreen.main.bounds.width, height: thin)
         .background(.clear)
         .id("TopPadding")
         .background(GeometryReader {
