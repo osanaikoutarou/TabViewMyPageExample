@@ -35,6 +35,7 @@ struct AlphaView: View {
     var tabViewIndex: Int               // この画面の位置
     var headerHeight: CGFloat           // Headerのスクロールする部分の高さ
     var tabHeight: CGFloat              // 残す部分の高さ
+    var scrollableHeight: CGFloat       // 動かせる量
 
     @Binding var selection: Int         // 現在表示されている画面
     @Binding var scrollOffsetForAlpha: CGFloat
@@ -83,18 +84,18 @@ private extension AlphaView {
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { scroll in
                     // 現在表示中の画面ならば
                     if isShowingThisScreen {
-                        headerTop = min(scroll, headerHeight - thin)
+                        headerTop = min(scroll, scrollableHeight - thin)
                         scrollOffsetForAlpha = scroll
 
-                        if scroll < headerHeight - thin {
+                        if scroll < scrollableHeight - thin {
                             // 他の画面のスクロール量をリセット
                             scrollOffsetForBeta = scroll
                             scrollOffsetForOmega = scroll
                         }
                         else {
                             // スクロール量を維持か、上に隙間が空く場合はHeaderに吸い付かせる
-                            scrollOffsetForBeta = max(scrollOffsetForBeta, min(scroll, headerHeight - thin))
-                            scrollOffsetForOmega = max(scrollOffsetForOmega, min(scroll, headerHeight - thin))
+                            scrollOffsetForBeta = max(scrollOffsetForBeta, min(scroll, scrollableHeight - thin))        //max(249.9, min(432, 249.9))
+                            scrollOffsetForOmega = max(scrollOffsetForOmega, min(scroll, scrollableHeight - thin))
                         }
                     }
                 }

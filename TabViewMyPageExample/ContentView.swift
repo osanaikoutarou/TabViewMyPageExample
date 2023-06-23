@@ -35,59 +35,14 @@ struct ContentView: View {
 
     var headerHeight: CGFloat { 300 }
     var tabHeight: CGFloat { 30 }
+    var scrollableHeight: CGFloat { 250 }
 
     var body: some View {
-
         ZStack {
             TabView(selection: $selection) {
-                AlphaView(tabViewIndex: 0,
-                          headerHeight: headerHeight,
-                          tabHeight: tabHeight,
-                          selection: $selection,
-                          scrollOffsetForAlpha: $scrollOffsetForAlpha,
-                          scrollOffsetForBeta: $scrollOffsetForBeta,
-                          scrollOffsetForOmega: $scrollOffsetForOmega,
-                          headerTop: $headerTop,
-                          customOnAppear: $onAppear0)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.red)
-                    .background(GeometryReader {
-                        Color.clear.preference(key: ViewOffsetKey0.self,
-                                               value: UIScreen.main.bounds.width * 0 - $0.frame(in: .global).minX)
-                    })
-                    .tag(0)
-                BetaView(tabViewIndex: 1,
-                         headerHeight: headerHeight,
-                         tabHeight: tabHeight,
-                         selection: $selection,
-                         scrollOffsetForAlpha: $scrollOffsetForAlpha,
-                         scrollOffsetForBeta: $scrollOffsetForBeta,
-                         scrollOffsetForOmega: $scrollOffsetForOmega,
-                         headerTop: $headerTop,
-                         customOnAppear: $onAppear1)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.green)
-                    .background(GeometryReader {
-                        Color.clear.preference(key: ViewOffsetKey1.self,
-                                               value: UIScreen.main.bounds.width * 1.0 - $0.frame(in: .global).minX)
-                    })
-                    .tag(1)
-                OmegaView(tabViewIndex: 2,
-                          headerHeight: headerHeight,
-                          tabHeight: tabHeight,
-                          selection: $selection,
-                          scrollOffsetForAlpha: $scrollOffsetForAlpha,
-                          scrollOffsetForBeta: $scrollOffsetForBeta,
-                          scrollOffsetForOmega: $scrollOffsetForOmega,
-                          headerTop: $headerTop,
-                          customOnAppear: $onAppear2)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue)
-                    .background(GeometryReader {
-                        Color.clear.preference(key: ViewOffsetKey2.self,
-                                               value: UIScreen.main.bounds.width * 2.0 - $0.frame(in: .global).minX)
-                    })
-                    .tag(2)
+                alphaView.tag(0)
+                betaView.tag(1)
+                omegaView.tag(2)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .onPreferenceChange(ViewOffsetKey0.self) {
@@ -174,7 +129,7 @@ struct ContentView: View {
                         // ヘッダーはここ
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: headerHeight)
+                    .frame(height: 300)
                     .background(.white.opacity(0.5))
                     .allowsHitTesting(false)
 
@@ -214,6 +169,7 @@ struct ContentView: View {
                     .frame(width: UIScreen.main.bounds.width/3.0, height: 5)
                     .background(.black)
                     .offset(x: tabViewOffsetX/3.0)
+                    .edgesIgnoringSafeArea(.all)
 
                 }
                 .offset(y: -headerTop)     // ⭐
@@ -224,6 +180,65 @@ struct ContentView: View {
 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .edgesIgnoringSafeArea(.all)
+    }
+
+    @ViewBuilder
+    var alphaView: some View {
+        AlphaView(tabViewIndex: 0,
+                  headerHeight: headerHeight,
+                  tabHeight: tabHeight,
+                  scrollableHeight: scrollableHeight,
+                  selection: $selection,
+                  scrollOffsetForAlpha: $scrollOffsetForAlpha,
+                  scrollOffsetForBeta: $scrollOffsetForBeta,
+                  scrollOffsetForOmega: $scrollOffsetForOmega,
+                  headerTop: $headerTop,
+                  customOnAppear: $onAppear0)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.red)
+            .background(GeometryReader {
+                Color.clear.preference(key: ViewOffsetKey0.self,
+                                       value: UIScreen.main.bounds.width * 0 - $0.frame(in: .global).minX)
+            })
+    }
+    @ViewBuilder
+    var betaView: some View {
+        BetaView(tabViewIndex: 1,
+                 headerHeight: headerHeight,
+                 tabHeight: tabHeight,
+                 scrollableHeight: scrollableHeight,
+                 selection: $selection,
+                 scrollOffsetForAlpha: $scrollOffsetForAlpha,
+                 scrollOffsetForBeta: $scrollOffsetForBeta,
+                 scrollOffsetForOmega: $scrollOffsetForOmega,
+                 headerTop: $headerTop,
+                 customOnAppear: $onAppear1)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.green)
+            .background(GeometryReader {
+                Color.clear.preference(key: ViewOffsetKey1.self,
+                                       value: UIScreen.main.bounds.width * 1.0 - $0.frame(in: .global).minX)
+            })
+    }
+    @ViewBuilder
+    var omegaView: some View {
+        OmegaView(tabViewIndex: 2,
+                  headerHeight: headerHeight,
+                  tabHeight: tabHeight,
+                  scrollableHeight: scrollableHeight,
+                  selection: $selection,
+                  scrollOffsetForAlpha: $scrollOffsetForAlpha,
+                  scrollOffsetForBeta: $scrollOffsetForBeta,
+                  scrollOffsetForOmega: $scrollOffsetForOmega,
+                  headerTop: $headerTop,
+                  customOnAppear: $onAppear2)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.blue)
+            .background(GeometryReader {
+                Color.clear.preference(key: ViewOffsetKey2.self,
+                                       value: UIScreen.main.bounds.width * 2.0 - $0.frame(in: .global).minX)
+            })
     }
 
     func setCurrentShowingStateBySelection() {

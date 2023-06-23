@@ -34,6 +34,7 @@ struct BetaView: View {
     var tabViewIndex: Int               // この画面の位置
     var headerHeight: CGFloat           // Headerのスクロールする部分の高さ
     var tabHeight: CGFloat              // 残す部分の高さ
+    var scrollableHeight: CGFloat       // 動かせる量
 
     @Binding var selection: Int         // 現在表示されている画面
     @Binding var scrollOffsetForAlpha: CGFloat
@@ -82,25 +83,25 @@ private extension BetaView {
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { scroll in
                     // 現在表示中の画面ならば
                     if isShowingThisScreen {
-                        headerTop = min(scroll, headerHeight - thin)
-                        scrollOffsetForAlpha = scroll
+                        headerTop = min(scroll, scrollableHeight - thin)
+                        scrollOffsetForBeta = scroll
 
-                        if scroll < headerHeight - thin {
+                        if scroll < scrollableHeight - thin {
                             // 他の画面のスクロール量をリセット
                             scrollOffsetForAlpha = scroll
                             scrollOffsetForOmega = scroll
                         }
                         else {
                             // スクロール量を維持か、上に隙間が空く場合はHeaderに吸い付かせる
-                            scrollOffsetForAlpha = max(scrollOffsetForAlpha, min(scroll, headerHeight - thin))
-                            scrollOffsetForOmega = max(scrollOffsetForOmega, min(scroll, headerHeight - thin))
+                            scrollOffsetForAlpha = max(scrollOffsetForAlpha, min(scroll, scrollableHeight - thin))
+                            scrollOffsetForOmega = max(scrollOffsetForOmega, min(scroll, scrollableHeight - thin))
                         }
                     }
                 }
                 .onAppear {
                     // scroll量を調整するため
                     // ただし、割合でしか指定できないので、スクロール量からUnitPointを計算してしていしている
-                    let unitPoint = UnitPoint.calcUnitPointY(y: -scrollOffsetForAlpha, scrollViewHeight: geometryProxy.size.height)
+                    let unitPoint = UnitPoint.calcUnitPointY(y: -scrollOffsetForBeta, scrollViewHeight: geometryProxy.size.height)
                     scrollProxy.scrollTo("TopPadding", anchor: UnitPoint(x: 0.5, y: unitPoint))
                 }
             }
