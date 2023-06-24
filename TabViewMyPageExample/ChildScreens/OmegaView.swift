@@ -69,6 +69,7 @@ private extension OmegaView {
                         // Paddingのためのダミー
                         dummyTopView
                     }
+                    .background { Color.clear }
 
                     LazyVGrid(columns: [
                         GridItem(.flexible(), spacing: 10, alignment: .center),
@@ -76,6 +77,7 @@ private extension OmegaView {
                     ]) {
                         mainContents
                     }
+                    .background { Color.red }
                 }
                 .coordinateSpace(name: "scrollView")
                 .scrollIndicators(.never)
@@ -125,8 +127,8 @@ private extension OmegaView {
     var dummyTopView: some View {
         VStack {
         }
-        .frame(width: UIScreen.main.bounds.width, height: headerHeight)
-        .background(.gray.opacity(0.5))
+        .frame(width: UIScreen.main.bounds.width, height: headerHeight + tabHeight)
+        .background { Color.gray.opacity(0.5)) }
     }
 
     @ViewBuilder

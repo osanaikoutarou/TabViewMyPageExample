@@ -70,6 +70,7 @@ private extension BetaView {
                         // Paddingのためのダミー
                         dummyTopView
                     }
+                    .background { Color.clear }
 
                     LazyVGrid(columns: [
                         GridItem(.flexible(), spacing: 10, alignment: .center),
@@ -77,6 +78,7 @@ private extension BetaView {
                     ]) {
                         mainContents
                     }
+                    .background { Color.green }
                 }
                 .coordinateSpace(name: "scrollView")
                 .scrollIndicators(.never)
@@ -126,8 +128,8 @@ private extension BetaView {
     var dummyTopView: some View {
         VStack {
         }
-        .frame(width: UIScreen.main.bounds.width, height: headerHeight)
-        .background(.gray.opacity(0.5))
+        .frame(width: UIScreen.main.bounds.width, height: headerHeight + tabHeight)
+        .background { Color.gray.opacity(0.5)) }
     }
 
     @ViewBuilder
